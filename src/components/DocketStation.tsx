@@ -14,6 +14,7 @@ import {
   extractTags, 
   extractSecuritySchemes 
 } from "../utils/openApiUtils";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 const DocketStation = () => {
   const [openApiData, setOpenApiData] = useState<string | undefined>(undefined);
@@ -86,25 +87,33 @@ const DocketStation = () => {
         </div>
       </div>
       
-      <div className="container mx-auto p-6 max-w-7xl">
+      <div className="container mx-auto p-6 max-w-full">
         <Header onImportSpec={handleImportSpec} onGenerateDoc={handleGenerateDoc} />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-          <ApiInformation apiInfo={apiInfo} />
-          <Servers serverList={servers} />
-        </div>
-        
-        <div className="mt-8">
-          <Tags tagList={tags} />
-        </div>
-        
-        <div className="mt-8">
-          <Paths securitySchemes={securitySchemes} />
-        </div>
-        
-        <div className="mt-8">
-          <Preview openApiData={isDocGenerated ? openApiData : undefined} />
-        </div>
+        <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-200px)] mt-8">
+          {/* Left Panel - API Editing Components */}
+          <ResizablePanel defaultSize={50} minSize={30}>
+            <div className="pr-4 space-y-8 overflow-y-auto max-h-[calc(100vh-200px)]">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <ApiInformation apiInfo={apiInfo} />
+                <Servers serverList={servers} />
+              </div>
+              
+              <Tags tagList={tags} />
+              
+              <Paths securitySchemes={securitySchemes} />
+            </div>
+          </ResizablePanel>
+          
+          <ResizableHandle withHandle />
+          
+          {/* Right Panel - Preview */}
+          <ResizablePanel defaultSize={50} minSize={30}>
+            <div className="pl-4 overflow-y-auto max-h-[calc(100vh-200px)]">
+              <Preview openApiData={isDocGenerated ? openApiData : undefined} />
+            </div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
         
         <footer className="mt-16 pb-4 text-center text-blue-300/60 text-sm font-medium">
           © 2025 DocketStation - Build beautiful API docs with ease
