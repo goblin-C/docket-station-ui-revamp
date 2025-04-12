@@ -4,7 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
-const ApiInformation = () => {
+interface ApiInformationProps {
+  apiInfo?: Record<string, any>;
+}
+
+const ApiInformation: React.FC<ApiInformationProps> = ({ apiInfo = {} }) => {
   return (
     <div className="card-container p-6">
       <h2 className="text-xl font-display font-semibold mb-5 text-docket-highlight">API Information</h2>
@@ -15,6 +19,7 @@ const ApiInformation = () => {
           <Input 
             placeholder="My API" 
             className="form-input text-white"
+            defaultValue={apiInfo.title || ""}
           />
         </div>
         
@@ -23,6 +28,7 @@ const ApiInformation = () => {
           <Textarea 
             placeholder="API Description" 
             className="form-input text-white min-h-[120px]"
+            defaultValue={apiInfo.description || ""}
           />
         </div>
         
@@ -31,6 +37,7 @@ const ApiInformation = () => {
           <Input 
             placeholder="1.0.0" 
             className="form-input text-white"
+            defaultValue={apiInfo.version || ""}
           />
         </div>
         
@@ -45,6 +52,7 @@ const ApiInformation = () => {
                 <Input 
                   placeholder="https://example.com/terms" 
                   className="form-input text-white"
+                  defaultValue={apiInfo.termsOfService || ""}
                 />
               </div>
               
@@ -56,6 +64,7 @@ const ApiInformation = () => {
                     <Input 
                       placeholder="API Team" 
                       className="form-input text-white"
+                      defaultValue={apiInfo.contact?.name || ""}
                     />
                   </div>
                   <div>
@@ -63,6 +72,7 @@ const ApiInformation = () => {
                     <Input 
                       placeholder="api@example.com" 
                       className="form-input text-white"
+                      defaultValue={apiInfo.contact?.email || ""}
                     />
                   </div>
                   <div>
@@ -70,6 +80,7 @@ const ApiInformation = () => {
                     <Input 
                       placeholder="https://example.com/support" 
                       className="form-input text-white"
+                      defaultValue={apiInfo.contact?.url || ""}
                     />
                   </div>
                 </div>
@@ -83,6 +94,7 @@ const ApiInformation = () => {
                     <Input 
                       placeholder="Apache 2.0" 
                       className="form-input text-white"
+                      defaultValue={apiInfo.license?.name || ""}
                     />
                   </div>
                   <div>
@@ -90,6 +102,7 @@ const ApiInformation = () => {
                     <Input 
                       placeholder="https://www.apache.org/licenses/LICENSE-2.0.html" 
                       className="form-input text-white"
+                      defaultValue={apiInfo.license?.url || ""}
                     />
                   </div>
                 </div>

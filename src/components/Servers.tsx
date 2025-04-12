@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,21 +19,38 @@ type Server = {
   variables: ServerVariable[];
 };
 
-const Servers = () => {
-  const [servers, setServers] = useState<Server[]>([
-    {
-      url: "https://{environment}.example.com",
-      description: "Production server",
-      variables: [
+interface ServersProps {
+  serverList?: any[];
+}
+
+const Servers: React.FC<ServersProps> = ({ serverList = [] }) => {
+  const [servers, setServers] = useState<Server[]>(
+    serverList.length > 0 
+      ? serverList.map(server => ({
+          url: server.url || "",
+          description: server.description || "",
+          variables: server.variables ? Object.entries(server.variables).map(([name, value]: [string, any]) => ({
+            name,
+            default: value.default || "",
+            enum: value.enum || [],
+            description: value.description || ""
+          })) : []
+        }))
+      : [
         {
-          name: "environment",
-          default: "api",
-          enum: ["api", "api.dev", "api.staging"],
-          description: "Server environment"
+          url: "https://{environment}.example.com",
+          description: "Production server",
+          variables: [
+            {
+              name: "environment",
+              default: "api",
+              enum: ["api", "api.dev", "api.staging"],
+              description: "Server environment"
+            }
+          ]
         }
       ]
-    }
-  ]);
+  );
   
   const [selectedServer, setSelectedServer] = useState<number>(0);
   const [showVariablesDialog, setShowVariablesDialog] = useState(false);

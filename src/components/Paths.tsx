@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -84,28 +83,29 @@ interface Path {
   operations: Operation[];
 }
 
-const Paths: React.FC = () => {
+interface PathsProps {
+  securitySchemes?: Record<string, any>;
+}
+
+const Paths: React.FC<PathsProps> = ({ securitySchemes = {} }) => {
   const [paths, setPaths] = useState<Path[]>([]);
   const [showPathForm, setShowPathForm] = useState(false);
   const [currentPath, setCurrentPath] = useState<Path | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
 
-  // Available security schemes (these would typically come from your global context/state)
-  const [securitySchemes, setSecuritySchemes] = useState<SecurityScheme[]>([
-    { 
-      id: '1', 
-      name: 'BearerAuth1', 
-      type: 'http', 
-      scheme: 'bearer',
-      bearerFormat: 'JWT'
-    },
-    { 
-      id: '2', 
-      name: 'ApiKeyAuth', 
-      type: 'apiKey', 
-      location: 'header' 
-    }
-  ]);
+  // Convert security schemes from OpenAPI format to component format
+  const [availableSecuritySchemes, setAvailableSecuritySchemes] = useState<SecurityScheme[]>(
+    Object.entries(securitySchemes).map(([name, scheme]: [string, any]) => ({
+      id: name,
+      name,
+      type: scheme.type,
+      location: scheme.in,
+      scheme: scheme.scheme,
+      bearerFormat: scheme.bearerFormat,
+      flows: scheme.flows,
+      openIdConnectUrl: scheme.openIdConnectUrl
+    }))
+  );
 
   const handleAddPath = () => {
     setCurrentPath(null);
@@ -170,7 +170,7 @@ const Paths: React.FC = () => {
                   <PathOperation 
                     key={operation.id} 
                     operation={operation} 
-                    securitySchemes={securitySchemes}
+                    securitySchemes={availableSecuritySchemes}
                     onUpdate={(updatedOperation) => {
                       const updatedPath = {
                         ...path,
@@ -201,7 +201,7 @@ const Paths: React.FC = () => {
             </DialogHeader>
             <PathForm 
               path={currentPath} 
-              securitySchemes={securitySchemes}
+              securitySchemes={availableSecuritySchemes}
               onSave={handleSavePath} 
               onCancel={() => setShowPathForm(false)} 
             />

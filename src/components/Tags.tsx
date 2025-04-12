@@ -15,8 +15,23 @@ type Tag = {
   };
 };
 
-const Tags = () => {
-  const [tags, setTags] = useState<Tag[]>([]);
+interface TagsProps {
+  tagList?: any[];
+}
+
+const Tags: React.FC<TagsProps> = ({ tagList = [] }) => {
+  const [tags, setTags] = useState<Tag[]>(
+    tagList.length > 0
+      ? tagList.map((tag: any) => ({
+          name: tag.name || "",
+          description: tag.description || "",
+          externalDocs: tag.externalDocs ? {
+            url: tag.externalDocs.url || "",
+            description: tag.externalDocs.description || ""
+          } : undefined
+        }))
+      : []
+  );
   const [isAddingTag, setIsAddingTag] = useState(false);
   const [currentTag, setCurrentTag] = useState<Tag>({
     name: "",
