@@ -6,90 +6,90 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 const ApiInformation = () => {
   return (
-    <div className="bg-docket-darkblue rounded-md p-6">
-      <h2 className="text-xl font-semibold mb-4 text-white">API Information</h2>
+    <div className="card-container p-6">
+      <h2 className="text-xl font-display font-semibold mb-5 text-docket-highlight">API Information</h2>
       
-      <div className="space-y-4">
+      <div className="space-y-5">
         <div>
-          <label className="block text-gray-300 mb-1">Title</label>
+          <label className="block text-blue-200 mb-2 font-medium">Title</label>
           <Input 
             placeholder="My API" 
-            className="bg-docket-darker border-gray-700 text-white"
+            className="form-input text-white"
           />
         </div>
         
         <div>
-          <label className="block text-gray-300 mb-1">Description</label>
+          <label className="block text-blue-200 mb-2 font-medium">Description</label>
           <Textarea 
             placeholder="API Description" 
-            className="bg-docket-darker border-gray-700 text-white min-h-[100px]"
+            className="form-input text-white min-h-[120px]"
           />
         </div>
         
         <div>
-          <label className="block text-gray-300 mb-1">Version</label>
+          <label className="block text-blue-200 mb-2 font-medium">Version</label>
           <Input 
             placeholder="1.0.0" 
-            className="bg-docket-darker border-gray-700 text-white"
+            className="form-input text-white"
           />
         </div>
         
         <Accordion type="single" collapsible className="border-none">
-          <AccordionItem value="additional-info" className="border-none">
-            <AccordionTrigger className="text-gray-300 py-1 hover:no-underline hover:text-white">
+          <AccordionItem value="additional-info" className="border-t border-docket-blue/20 pt-2">
+            <AccordionTrigger className="text-blue-300 py-2 hover:no-underline hover:text-docket-highlight font-medium">
               Additional Information
             </AccordionTrigger>
-            <AccordionContent className="pt-4 space-y-4">
+            <AccordionContent className="pt-4 space-y-5">
               <div>
-                <label className="block text-gray-300 mb-1">Terms of Service URL</label>
+                <label className="block text-blue-200 mb-2 font-medium">Terms of Service URL</label>
                 <Input 
                   placeholder="https://example.com/terms" 
-                  className="bg-docket-darker border-gray-700 text-white"
+                  className="form-input text-white"
                 />
               </div>
               
               <div>
-                <h4 className="text-gray-300 mb-2">Contact Information</h4>
-                <div className="space-y-3 ml-1">
+                <h4 className="text-blue-200 mb-3 font-medium">Contact Information</h4>
+                <div className="space-y-4 ml-1">
                   <div>
-                    <label className="block text-gray-400 mb-1 text-sm">Name</label>
+                    <label className="block text-blue-300 mb-1.5 text-sm">Name</label>
                     <Input 
                       placeholder="API Team" 
-                      className="bg-docket-darker border-gray-700 text-white"
+                      className="form-input text-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 mb-1 text-sm">Email</label>
+                    <label className="block text-blue-300 mb-1.5 text-sm">Email</label>
                     <Input 
                       placeholder="api@example.com" 
-                      className="bg-docket-darker border-gray-700 text-white"
+                      className="form-input text-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 mb-1 text-sm">URL</label>
+                    <label className="block text-blue-300 mb-1.5 text-sm">URL</label>
                     <Input 
                       placeholder="https://example.com/support" 
-                      className="bg-docket-darker border-gray-700 text-white"
+                      className="form-input text-white"
                     />
                   </div>
                 </div>
               </div>
               
               <div>
-                <h4 className="text-gray-300 mb-2">License</h4>
-                <div className="space-y-3 ml-1">
+                <h4 className="text-blue-200 mb-3 font-medium">License</h4>
+                <div className="space-y-4 ml-1">
                   <div>
-                    <label className="block text-gray-400 mb-1 text-sm">Name</label>
+                    <label className="block text-blue-300 mb-1.5 text-sm">Name</label>
                     <Input 
                       placeholder="Apache 2.0" 
-                      className="bg-docket-darker border-gray-700 text-white"
+                      className="form-input text-white"
                     />
                   </div>
                   <div>
-                    <label className="block text-gray-400 mb-1 text-sm">URL</label>
+                    <label className="block text-blue-300 mb-1.5 text-sm">URL</label>
                     <Input 
                       placeholder="https://www.apache.org/licenses/LICENSE-2.0.html" 
-                      className="bg-docket-darker border-gray-700 text-white"
+                      className="form-input text-white"
                     />
                   </div>
                 </div>

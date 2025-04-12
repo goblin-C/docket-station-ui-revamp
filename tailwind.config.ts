@@ -26,8 +26,12 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         docket: {
-          blue: "#1e3a8a",
+          blue: "#3b82f6", // Updated to a softer blue
           darker: "#0f172a",
+          darkblue: "#1e3a8a",
+          accent: "#60a5fa", // Added accent color
+          highlight: "#bfdbfe", // Added highlight color
+          surface: "#1e293b", // Added surface color for cards
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -62,6 +66,10 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        display: ['Montserrat', 'system-ui', 'sans-serif'],
       },
       keyframes: {
         "accordion-down": {

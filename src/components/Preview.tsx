@@ -73,17 +73,18 @@ tags:
   };
   
   return (
-    <div>
-      <div className="flex mb-4 bg-docket-darkblue rounded-t-md overflow-hidden">
+    <div className="card-container overflow-hidden">
+      <div className="flex border-b border-docket-blue/20">
         <Button 
           variant="ghost" 
-          className={`rounded-none px-6 text-sm ${!generated ? "text-gray-300" : "bg-docket-darkblue text-white"}`}
+          className={`rounded-none px-6 text-base font-medium ${generated ? "text-blue-300 hover:text-white" : "bg-docket-blue/10 text-white"}`}
+          onClick={() => setGenerated(false)}
         >
           Edit
         </Button>
         <Button 
           variant="ghost" 
-          className={`rounded-none px-6 text-sm ${generated ? "text-gray-300" : "bg-docket-darkblue text-white"}`}
+          className={`rounded-none px-6 text-base font-medium ${!generated ? "text-blue-300 hover:text-white" : "bg-docket-blue/10 text-white"}`}
           onClick={() => setGenerated(true)}
         >
           Preview
@@ -91,38 +92,38 @@ tags:
       </div>
       
       {generated ? (
-        <div className="bg-docket-darkblue rounded-b-md p-4">
-          <Tabs defaultValue="yaml" value={format} onValueChange={(value) => setFormat(value as "yaml" | "json")}>
-            <div className="flex justify-between items-center mb-3">
-              <TabsList className="bg-docket-darker h-8">
-                <TabsTrigger value="yaml" className="text-xs px-3 h-6">YAML</TabsTrigger>
-                <TabsTrigger value="json" className="text-xs px-3 h-6">JSON</TabsTrigger>
+        <div className="p-6">
+          <Tabs defaultValue="yaml" value={format} onValueChange={(value) => setFormat(value as "yaml" | "json")} className="w-full">
+            <div className="flex justify-between items-center mb-4">
+              <TabsList className="bg-docket-blue/10 h-9 p-1">
+                <TabsTrigger value="yaml" className="px-4 data-[state=active]:bg-docket-blue data-[state=active]:text-white">YAML</TabsTrigger>
+                <TabsTrigger value="json" className="px-4 data-[state=active]:bg-docket-blue data-[state=active]:text-white">JSON</TabsTrigger>
               </TabsList>
               
               <div className="flex gap-2">
                 <Button 
                   size="sm" 
                   variant="outline" 
-                  className="h-8 text-xs flex items-center gap-1.5 text-gray-300 border-gray-700"
+                  className="h-9 text-sm flex items-center gap-2 text-blue-200 border-blue-500/30 hover:border-blue-400 hover:bg-docket-blue/20"
                   onClick={copyToClipboard}
                 >
-                  <Copy className="h-3.5 w-3.5" />
+                  <Copy className="h-4 w-4" />
                   Copy
                 </Button>
               </div>
             </div>
             
             <TabsContent value="yaml" className="mt-0">
-              <div className="bg-docket-darker rounded-md p-4 text-left">
-                <pre className="text-gray-300 text-sm font-mono whitespace-pre overflow-x-auto">
+              <div className="bg-docket-darker rounded-xl p-5 text-left border border-docket-blue/20">
+                <pre className="text-blue-100 text-sm font-mono whitespace-pre overflow-x-auto">
                   {generated ? sampleYaml : "Click \"Generate Documentation\" to see the output here."}
                 </pre>
               </div>
             </TabsContent>
             
             <TabsContent value="json" className="mt-0">
-              <div className="bg-docket-darker rounded-md p-4 text-left">
-                <pre className="text-gray-300 text-sm font-mono whitespace-pre overflow-x-auto">
+              <div className="bg-docket-darker rounded-xl p-5 text-left border border-docket-blue/20">
+                <pre className="text-blue-100 text-sm font-mono whitespace-pre overflow-x-auto">
                   {generated ? sampleJson : "Click \"Generate Documentation\" to see the output here."}
                 </pre>
               </div>
@@ -130,8 +131,16 @@ tags:
           </Tabs>
         </div>
       ) : (
-        <div className="bg-docket-darkblue rounded-b-md p-6 text-center text-gray-400">
-          Edit your API specification and click "Generate Documentation" to preview the output.
+        <div className="p-12 text-center">
+          <p className="text-blue-300 text-lg">
+            Edit your API specification and click "Generate Documentation" to preview the output.
+          </p>
+          <Button 
+            className="mt-6 bg-docket-accent text-white hover:bg-docket-blue shadow-md px-6 py-2.5 text-base"
+            onClick={() => setGenerated(true)}
+          >
+            Generate Documentation
+          </Button>
         </div>
       )}
     </div>

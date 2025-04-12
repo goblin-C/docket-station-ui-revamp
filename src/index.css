@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,16 +16,16 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-foreground: 210 40% 98%;
 
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
 
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted-foreground: 215 20.2% 75.1%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 217.2 91.2% 59.8%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
@@ -31,9 +33,9 @@
 
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
+    --ring: 224.3 76.3% 48%;
     
-    --radius: 0.5rem;
+    --radius: 0.75rem;
   }
 }
 
@@ -43,6 +45,20 @@
   }
 
   body {
-    @apply bg-docket-darker text-foreground;
+    @apply bg-docket-darker text-foreground font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer components {
+  .card-container {
+    @apply rounded-xl border border-docket-blue/20 bg-docket-surface shadow-lg shadow-docket-blue/5;
+  }
+  
+  .form-input {
+    @apply bg-docket-darker border-docket-blue/30 rounded-lg focus:border-docket-accent focus:ring-1 focus:ring-docket-accent;
   }
 }
