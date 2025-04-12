@@ -5,6 +5,7 @@ import ApiInformation from "./ApiInformation";
 import Servers from "./Servers";
 import Tags from "./Tags";
 import Preview from "./Preview";
+import Paths from "./Paths";
 
 const DocketStation = () => {
   return (
@@ -26,6 +27,10 @@ const DocketStation = () => {
         
         <div className="mt-6">
           <Tags />
+        </div>
+        
+        <div className="mt-6">
+          <Paths />
         </div>
         
         <div className="mt-6">
