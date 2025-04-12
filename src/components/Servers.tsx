@@ -1,9 +1,8 @@
-
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { PlusCircle, Variables, X, Trash2 } from "lucide-react";
+import { PlusCircle, Variable, X, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 type ServerVariable = {
@@ -136,7 +135,7 @@ const Servers = () => {
                     size="sm" 
                     className="flex items-center gap-1.5 text-gray-300 border-gray-700"
                   >
-                    <Variables className="h-4 w-4" />
+                    <Variable className="h-4 w-4" />
                     Variables ({servers[selectedServer].variables.length})
                   </Button>
                 </DialogTrigger>
