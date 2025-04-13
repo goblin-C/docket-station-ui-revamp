@@ -9,17 +9,18 @@ import {
   DialogTrigger,
   DialogClose 
 } from "@/components/ui/dialog";
-import { Sun, Import, Download, ChevronDown, FilePlus } from "lucide-react";
+import { Sun, Moon, Import, Download, ChevronDown } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 
 interface HeaderProps {
   onImportSpec: (spec: string) => void;
-  onGenerateDoc: () => void;
+  isDarkMode: boolean;
+  onToggleDarkMode: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ onImportSpec, onGenerateDoc }) => {
+const Header: React.FC<HeaderProps> = ({ onImportSpec, isDarkMode, onToggleDarkMode }) => {
   const [importedSpec, setImportedSpec] = useState<string>("");
   const [importDialogOpen, setImportDialogOpen] = useState(false);
 
@@ -47,8 +48,13 @@ const Header: React.FC<HeaderProps> = ({ onImportSpec, onGenerateDoc }) => {
     <div className="flex justify-between items-center py-6">
       <h1 className="text-2xl font-bold text-white font-display">API Documentation Builder</h1>
       <div className="flex gap-3">
-        <Button variant="ghost" size="icon" className="text-blue-300 hover:text-white hover:bg-docket-blue/20">
-          <Sun className="h-5 w-5" />
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          onClick={onToggleDarkMode}
+          className="text-blue-300 hover:text-white hover:bg-docket-blue/20"
+        >
+          {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
         
         <Dialog open={importDialogOpen} onOpenChange={setImportDialogOpen}>
@@ -86,13 +92,6 @@ const Header: React.FC<HeaderProps> = ({ onImportSpec, onGenerateDoc }) => {
           </DialogContent>
         </Dialog>
         
-        <Button 
-          className="bg-docket-accent text-white hover:bg-docket-blue shadow-md"
-          onClick={onGenerateDoc}
-        >
-          Generate Documentation
-        </Button>
-        
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="flex items-center gap-2 text-blue-100 border-blue-500/30 hover:border-blue-400 hover:bg-docket-blue/20">
@@ -107,11 +106,6 @@ const Header: React.FC<HeaderProps> = ({ onImportSpec, onGenerateDoc }) => {
             <DropdownMenuItem className="hover:bg-docket-blue/20 focus:bg-docket-blue/20">Swagger UI HTML</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-        
-        <Button variant="outline" className="flex items-center gap-2 text-blue-100 border-blue-500/30 hover:border-blue-400 hover:bg-docket-blue/20">
-          <FilePlus className="h-4 w-4" />
-          New
-        </Button>
       </div>
     </div>
   );

@@ -5,14 +5,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Copy, Download } from "lucide-react";
 import { toast } from "sonner";
 import { formatOpenApiSpec } from "../utils/openApiUtils";
+import SwaggerPreview from "./SwaggerPreview";
 
 interface PreviewProps {
   openApiData?: string;
 }
 
 const Preview: React.FC<PreviewProps> = ({ openApiData }) => {
-  const [format, setFormat] = useState<"yaml" | "json">("yaml");
-  const [generated, setGenerated] = useState<boolean>(false);
+  const [format, setFormat] = useState<"visual" | "yaml" | "json">("visual");
   const [formattedYaml, setFormattedYaml] = useState<string>("");
   const [formattedJson, setFormattedJson] = useState<string>("");
   
@@ -21,7 +21,6 @@ const Preview: React.FC<PreviewProps> = ({ openApiData }) => {
       try {
         setFormattedYaml(formatOpenApiSpec(openApiData, "yaml"));
         setFormattedJson(formatOpenApiSpec(openApiData, "json"));
-        setGenerated(!!openApiData);
       } catch (error) {
         console.error("Error formatting OpenAPI data:", error);
         // Fallback to raw data
@@ -32,10 +31,6 @@ const Preview: React.FC<PreviewProps> = ({ openApiData }) => {
   }, [openApiData]);
   
   const getDisplayContent = () => {
-    if (!generated) {
-      return "Click \"Generate Documentation\" to see the output here.";
-    }
-    
     if (!openApiData) {
       return format === "yaml" 
         ? `openapi: 3.0.0\ninfo:\n  title: Sample API\n  version: 1.0.0`
@@ -46,14 +41,31 @@ const Preview: React.FC<PreviewProps> = ({ openApiData }) => {
   };
   
   const copyToClipboard = () => {
-    const content = getDisplayContent();
+    let content = "";
+    if (format === "visual") {
+      // When in visual mode, copy the JSON representation
+      content = formattedJson;
+    } else {
+      content = getDisplayContent();
+    }
+    
     navigator.clipboard.writeText(content);
     toast.success("Copied to clipboard");
   };
 
   const downloadFile = () => {
-    const content = getDisplayContent();
-    const fileType = format === "yaml" ? "yaml" : "json";
+    let content = "";
+    let fileType = "";
+    
+    if (format === "visual") {
+      // When in visual mode, download the JSON representation
+      content = formattedJson;
+      fileType = "json";
+    } else {
+      content = getDisplayContent();
+      fileType = format;
+    }
+    
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -73,9 +85,10 @@ const Preview: React.FC<PreviewProps> = ({ openApiData }) => {
       </div>
       
       <div className="p-6 flex-grow overflow-hidden flex flex-col">
-        <Tabs defaultValue="yaml" value={format} onValueChange={(value) => setFormat(value as "yaml" | "json")} className="w-full flex-grow flex flex-col">
+        <Tabs defaultValue="visual" value={format} onValueChange={(value) => setFormat(value as "visual" | "yaml" | "json")} className="w-full flex-grow flex flex-col">
           <div className="flex justify-between items-center mb-4">
             <TabsList className="bg-docket-blue/10 h-9 p-1">
+              <TabsTrigger value="visual" className="px-4 data-[state=active]:bg-docket-blue data-[state=active]:text-white">Visual</TabsTrigger>
               <TabsTrigger value="yaml" className="px-4 data-[state=active]:bg-docket-blue data-[state=active]:text-white">YAML</TabsTrigger>
               <TabsTrigger value="json" className="px-4 data-[state=active]:bg-docket-blue data-[state=active]:text-white">JSON</TabsTrigger>
             </TabsList>
@@ -99,17 +112,14 @@ const Preview: React.FC<PreviewProps> = ({ openApiData }) => {
                 <Download className="h-4 w-4" />
                 Download
               </Button>
-              {!openApiData && (
-                <Button 
-                  size="sm"
-                  className="h-9 text-sm bg-docket-accent text-white hover:bg-docket-blue"
-                  onClick={() => setGenerated(true)}
-                >
-                  Generate
-                </Button>
-              )}
             </div>
           </div>
+          
+          <TabsContent value="visual" className="mt-0 flex-grow flex">
+            <div className="bg-white rounded-xl p-0 text-left border border-docket-blue/20 w-full h-full overflow-auto">
+              <SwaggerPreview openApiData={openApiData} />
+            </div>
+          </TabsContent>
           
           <TabsContent value="yaml" className="mt-0 flex-grow flex">
             <div className="bg-docket-darker rounded-xl p-5 text-left border border-docket-blue/20 w-full h-full overflow-auto">

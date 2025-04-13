@@ -16,13 +16,48 @@ import {
 } from "../utils/openApiUtils";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
+// Default security schemes based on the provided schema
+const DEFAULT_SECURITY_SCHEMES = {
+  BasicAuth: {
+    type: 'http',
+    scheme: 'basic'
+  },
+  BearerAuth: {
+    type: 'http',
+    scheme: 'bearer'
+  },
+  ApiKeyAuth: {
+    type: 'apiKey',
+    in: 'header',
+    name: 'X-API-Key'
+  },
+  OpenID: {
+    type: 'openIdConnect',
+    openIdConnectUrl: 'https://example.com/.well-known/openid-configuration'
+  },
+  OAuth2: {
+    type: 'oauth2',
+    flows: {
+      authorizationCode: {
+        authorizationUrl: 'https://example.com/oauth/authorize',
+        tokenUrl: 'https://example.com/oauth/token',
+        scopes: {
+          read: 'Grants read access',
+          write: 'Grants write access',
+          admin: 'Grants access to admin operations'
+        }
+      }
+    }
+  }
+};
+
 const DocketStation = () => {
   const [openApiData, setOpenApiData] = useState<string | undefined>(undefined);
-  const [isDocGenerated, setIsDocGenerated] = useState<boolean>(false);
   const [apiInfo, setApiInfo] = useState<Record<string, any>>({});
   const [servers, setServers] = useState<any[]>([]);
   const [tags, setTags] = useState<any[]>([]);
-  const [securitySchemes, setSecuritySchemes] = useState<Record<string, any>>({});
+  const [securitySchemes, setSecuritySchemes] = useState<Record<string, any>>(DEFAULT_SECURITY_SCHEMES);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(true);
 
   const handleImportSpec = (spec: string) => {
     if (!validateOpenApiSpec(spec)) {
@@ -43,7 +78,12 @@ const DocketStation = () => {
       setApiInfo(info);
       setServers(serverList);
       setTags(tagList);
-      setSecuritySchemes(security);
+      
+      // Merge default security schemes with extracted ones
+      setSecuritySchemes({
+        ...DEFAULT_SECURITY_SCHEMES,
+        ...security
+      });
       
       toast.success("API specification imported successfully");
     } catch (error) {
@@ -52,43 +92,31 @@ const DocketStation = () => {
     }
   };
 
-  const handleGenerateDoc = () => {
-    if (!openApiData) {
-      toast.warning("Please import or create an API specification first");
-      return;
-    }
-    
-    setIsDocGenerated(true);
-    toast.success("Documentation generated successfully");
+  const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
   };
 
-  // Example of pre-loading the PetStore API 
+  // Auto-generate the documentation whenever relevant state changes
   useEffect(() => {
-    // You could auto-load the PetStore API here if needed
-    // This is commented out to avoid loading automatically without user consent
-    /*
-    fetch('https://petstore3.swagger.io/api/v3/openapi.json')
-      .then(response => response.text())
-      .then(data => {
-        handleImportSpec(data);
-      })
-      .catch(error => {
-        console.error('Error fetching PetStore API:', error);
-      });
-    */
-  }, []);
+    // This effect ensures the preview is always up-to-date
+    // without requiring a separate "Generate Documentation" action
+  }, [apiInfo, servers, tags, securitySchemes]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-docket-darker to-docket-darker/95 text-white font-sans">
-      <div className="bg-gradient-to-r from-docket-blue to-docket-blue/80 p-5 shadow-md">
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gradient-to-b from-docket-darker to-docket-darker/95 text-white' : 'bg-gradient-to-b from-gray-100 to-white text-gray-900'} font-sans`}>
+      <div className={`${isDarkMode ? 'bg-gradient-to-r from-docket-blue to-docket-blue/80' : 'bg-gradient-to-r from-blue-600 to-blue-500'} p-5 shadow-md`}>
         <div className="container mx-auto">
-          <h1 className="text-3xl font-bold font-display tracking-tight">DocketStation</h1>
+          <h1 className="text-3xl font-bold font-display tracking-tight text-white">DocketStation</h1>
           <p className="text-blue-100 mt-1 text-lg">API documentation builder for modern APIs</p>
         </div>
       </div>
       
       <div className="container mx-auto p-6 max-w-full">
-        <Header onImportSpec={handleImportSpec} onGenerateDoc={handleGenerateDoc} />
+        <Header 
+          onImportSpec={handleImportSpec} 
+          isDarkMode={isDarkMode}
+          onToggleDarkMode={toggleDarkMode}
+        />
         
         <ResizablePanelGroup direction="horizontal" className="min-h-[calc(100vh-200px)] mt-8">
           {/* Left Panel - API Editing Components */}
@@ -110,7 +138,7 @@ const DocketStation = () => {
           {/* Right Panel - Preview */}
           <ResizablePanel defaultSize={50} minSize={30}>
             <div className="pl-4 overflow-y-auto max-h-[calc(100vh-200px)]">
-              <Preview openApiData={isDocGenerated ? openApiData : undefined} />
+              <Preview openApiData={openApiData} />
             </div>
           </ResizablePanel>
         </ResizablePanelGroup>
